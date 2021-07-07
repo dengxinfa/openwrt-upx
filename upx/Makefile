@@ -7,20 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=upx
-PKG_RELEASE:=1
-
-PKG_MAINTAINER:=Xingwang Liao <kuoruan@gmail.com>
-PKG_LICENSE:=GPL-2.0-only
-PKG_LICENSE_FILES:=COPYING LICENSE
-
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_DATE:=2021-04-23
-PKG_SOURCE_VERSION:=2dae2a39972bc7c562dd3b02444336050a0b242e
-PKG_SOURCE_URL:=https://github.com/upx/upx.git
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_DATE).tar.gz
+PKG_VERSION:=3.96
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.xz
+PKG_SOURCE_URL:=https://github.com/upx/upx/releases/download/v$(PKG_VERSION)
+PKG_HASH:=47774df5c958f2868ef550fb258b97c73272cb1f44fe776b798e393465993714
 
 HOST_BUILD_DEPENDS:=ucl/host
-
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)-src
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,7 +21,7 @@ define Host/Compile
 	UPX_UCLDIR=$(STAGING_DIR_HOST) \
 	$(MAKE) -C $(HOST_BUILD_DIR)/src \
 		CXXFLAGS_WERROR="" LDFLAGS="$(HOST_LDFLAGS)" \
-		CXX="$(HOSTCXX)"
+		CXX="$(HOSTCXX) -std=gnu++11"
 endef
 
 define Host/Install
